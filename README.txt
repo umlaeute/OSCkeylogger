@@ -1,4 +1,4 @@
-OSC keylogger
+OSCkeylogger
 
 this little program logs all keypresses on your computer and sends them via OSC
 to a (potentially remote) OSC-receiver.
