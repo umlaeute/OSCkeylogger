@@ -5,7 +5,7 @@ to a (potentially remote) OSC-receiver.
 
 USAGE:
 start with 
-$ ./kb2osc.py <port> <host>
+$ ./OSCkeylogger.py <port> <host>
 this will send all data to <host>:<port> using UDP.
 the defaults are:
  host: localhost
