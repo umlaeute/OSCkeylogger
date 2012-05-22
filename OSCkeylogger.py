@@ -3,7 +3,7 @@
 
 """keylogger that send events via OSC.
 each keypress generates an event like:
-  /keylogger/<window>/<keyname> <bool:down>
+  /keylogger/window/<window>/<keyname>/key <bool:down>
 """
 
 import sys
@@ -27,8 +27,8 @@ def printevent(event):
 
 def sendevent(event, down):
 	bundle=osc.createBundle()
-	osc.appendToBundle(bundle, "/keylogger/window/"+event.Window, [event.Key, down])
-	osc.appendToBundle(bundle, "/keylogger/WindowName/"+event.WindowName, [event.Key, down])
+	osc.appendToBundle(bundle, "/keylogger/window/"+event.Window+"/key", [event.Key, down])
+	osc.appendToBundle(bundle, "/keylogger/WindowName/"+event.WindowName+"/key", [event.Key, down])
 	osc.sendBundle(bundle, Host, Port)
 	
  
