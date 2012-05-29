@@ -59,9 +59,6 @@ class OSCkeylogger:
     def setHostPort(self, host, port):
         self.host=host
         self.port=port
-        print "OKL: %s:%d" % (host, port)
-
-
 
 def main(script, port=6666, host="localhost"):
     okl = OSCkeylogger(host, port)
