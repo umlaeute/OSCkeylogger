@@ -9,8 +9,6 @@ each keypress generates an event like:
 import sys
 import hooklib, osc
 
-OKL = None
-
 class OSCkeylogger:
     host="localhost"
     port=6666
@@ -43,11 +41,6 @@ class OSCkeylogger:
         return True
 
     def __init__(self, port=6666, host="localhost"):
-        global OKL
-        if(OKL):
-            raise Exception("OSCkeylogger already exists")
-        OKL=self
-        
         osc.init()
         self.host=host
         self.port=int(port)
