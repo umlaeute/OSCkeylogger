@@ -17,7 +17,7 @@ class OklConfigDialog(tkSimpleDialog.Dialog):
     host="localhost"
     port=6666
     parent=None
-    
+
     def __init__(self, root, parent, host="localhost", port=6666):
         self.hostport=parent
         tkSimpleDialog.Dialog.__init__(self, root)
@@ -27,14 +27,14 @@ class OklConfigDialog(tkSimpleDialog.Dialog):
     def setentries(self):
         self.e1.delete(0, END)
         self.e2.delete(0, END)
-        
+
         if(self.hostport):
             self.host=self.hostport.host
             self.port=self.hostport.port
 
         self.e1.insert(0, str(self.host))
         self.e2.insert(0, str(self.port))
-            
+
 
     def body(self, master):
         Label(master, text="Host:").grid(row=0)
@@ -62,16 +62,14 @@ class OklConfigDialog(tkSimpleDialog.Dialog):
                 "Bad input",
                 "Illegal values, please try again"
             )
-            
+
             return 0
 
     def apply(self):
         if(self.hostport):
             self.hostport.setHostPort(self.host, self.port)
-#        if(self.hostport):
-#            self.hostport.host=self.host
-#            self.hostport.port=self.port
-#            #print "got %s:%d for %s" % (self.hostport.host, self.hostport.port, str(self.hostport))
+        else:
+            print "no target for setting %s:%d" % (self.host, self.port)
 
 class OklAppWindow():
     top = 0
@@ -84,10 +82,10 @@ class OklAppWindow():
         
         self.l1 = Label(self.top, text="Host:").grid(row=0)
         self.l2 = Label(self.top, text="Port:").grid(row=1)
-        
+
         self.e1 = Label(self.top, text=self.host).grid(row=0, column=1)
         self.e2 = Label(self.top, text=str(self.port)).grid(row=1, column=1)
-        
+
         Button(self.top, text="configure", command=self.configure).grid(row=2, column=1)
 
         self.l3 = Label(self.top, text="Event:").grid(row=3)
