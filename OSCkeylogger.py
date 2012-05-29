@@ -40,7 +40,7 @@ class OSCkeylogger:
         #printevent(event)
         return True
 
-    def __init__(self, port=6666, host="localhost"):
+    def __init__(self, host="localhost", port=6666):
         osc.init()
         self.host=host
         self.port=int(port)
@@ -55,7 +55,7 @@ class OSCkeylogger:
 
 
 def main(script, port=6666, host="localhost"):
-    okl = OSCkeylogger(port, host)
+    okl = OSCkeylogger(host, port)
     okl.start()
 
 
