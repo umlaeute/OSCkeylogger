@@ -41,6 +41,7 @@ def OnKeyboardEvent(event):
 	return True
 
 def main(script, port=6666, host="localhost"):
+        global Host, Port
 	Host=host
         Port=int(port)
         print "reporting to %s:%d" % (Host, Port)
