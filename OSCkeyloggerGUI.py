@@ -9,6 +9,9 @@ each keypress generates an event like:
 
 from Tkinter import *
 import string
+from threading import Thread
+
+from OSCkeylogger import OSCkeylogger
 
 import tkSimpleDialog
 import tkMessageBox
@@ -75,11 +78,16 @@ class OklAppWindow():
     top = 0
     host="localhust"
     port=7777
+    okl=None
 
-    def __init__(self):
+    def __init__(self, host, port, okl):
         self.top=Tk()
         self.top.title("OSCkeylogger")
-        
+
+        self.host=host
+        self.port=port
+        self.okl=okl
+
         self.l1 = Label(self.top, text="Host:").grid(row=0)
         self.l2 = Label(self.top, text="Port:").grid(row=1)
 
@@ -91,26 +99,53 @@ class OklAppWindow():
         self.l3 = Label(self.top, text="Event:").grid(row=3)
         self.e3 = Label(self.top, text="").grid(row=3, column=1)
         self.top.update()
-        
+
+        self.pushHostPort()
+
     def start(self):
         self.top.mainloop()
 
     def configure(self):
         d = OklConfigDialog(self.top, self, self.host, self.port)
-        self.dump()
 
     def setHostPort(self, host, port):
         self.host=host
         self.port=port
+        self.pushHostPort()
+
+    def pushHostPort(self):
+        self.okl.setHostPort(self.host, self.port)
+        self.dump()
 
     def dump(self):
         print "connecting to %s:%d" % (self.host, self.port)
 
 
+class OKLThread(Thread):
+    okl=None
+
+    def __init__(self, okl) :
+        Thread.__init__(self)
+        self.okl=okl
+
+    def run(self):
+        if self.okl:
+            self.okl.start()
+
+    def stop(self) :
+        if self.okl:
+            self.okl.stop()
 
 def main(script, port=6666, host="localhost"):
-    app = OklAppWindow()
-    app.start()
+    okl = OSCkeylogger(host, port)
+    oklthread=OKLThread(okl)
+    oklthread.run()
+    app = OklAppWindow(host, port, okl)
+    try:
+        app.start()
+    except KeyboardInterrupt:
+         print 'KeyBoardInterrupt'
+    oklthread.stop()
 
 if __name__ == '__main__':
 	main(*sys.argv)
