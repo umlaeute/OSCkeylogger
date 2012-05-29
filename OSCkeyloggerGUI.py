@@ -56,6 +56,8 @@ class OklConfigDialog(tkSimpleDialog.Dialog):
         try:
             first= str(self.e1.get())
             second = int(self.e2.get())
+            if(second<1 or second>65535):
+                raise ValueError
             self.host=first
             self.port=second
             return 1
