@@ -137,10 +137,11 @@ class OKLThread(Thread):
             self.okl.stop()
 
 def main(script, port=6666, host="localhost"):
-    okl = OSCkeylogger(host, port)
+    _port=int(port)
+    okl = OSCkeylogger(host, _port)
     oklthread=OKLThread(okl)
     oklthread.run()
-    app = OklAppWindow(host, port, okl)
+    app = OklAppWindow(host, _port, okl)
     try:
         app.start()
     except KeyboardInterrupt:
