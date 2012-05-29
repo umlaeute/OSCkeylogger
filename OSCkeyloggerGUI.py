@@ -38,7 +38,6 @@ class OklConfigDialog(tkSimpleDialog.Dialog):
         self.e1.insert(0, str(self.host))
         self.e2.insert(0, str(self.port))
 
-
     def body(self, master):
         Label(master, text="Host:").grid(row=0)
         Label(master, text="Port:").grid(row=1)
@@ -82,13 +81,19 @@ class OklAppWindow():
     port=7777
     okl=None
 
+    eventName=None
+
     def __init__(self, host, port, okl):
         self.top=Tk()
         self.top.title("OSCkeylogger")
+        self.top.protocol("WM_DELETE_WINDOW", self.cancel)
+
 
         self.host=host
         self.port=port
         self.okl=okl
+
+        self.eventName=StringVar()
 
         self.l1 = Label(self.top, text="Host:").grid(row=0)
         self.l2 = Label(self.top, text="Port:").grid(row=1)
@@ -99,10 +104,10 @@ class OklAppWindow():
         Button(self.top, text="configure", command=self.configure).grid(row=2, column=1)
 
         self.l3 = Label(self.top, text="Event:").grid(row=3)
-        self.e3 = Label(self.top, text="").grid(row=3, column=1)
+        self.e3 = Label(self.top, width=30, textvariable=self.eventName).grid(row=3, column=1)
         self.top.update()
-
         self.pushHostPort()
+
 
     def start(self):
         self.top.mainloop()
@@ -122,6 +127,15 @@ class OklAppWindow():
     def dump(self):
         print "connecting to %s:%d" % (self.host, self.port)
 
+    def eventCallback(self, windowname, keyname):
+        eventname=keyname+"@"+windowname
+        if(self.eventName):
+            self.eventName.set(eventname)
+        else:
+            print "event: %s" % (eventname)
+
+    def cancel(self):
+        self.top.destroy()
 
 class OKLThread(Thread):
     okl=None
@@ -144,6 +158,7 @@ def main(script, port=6666, host="localhost"):
     oklthread=OKLThread(okl)
     oklthread.run()
     app = OklAppWindow(host, _port, okl)
+    okl.setCallback(app.eventCallback)
     try:
         app.start()
     except KeyboardInterrupt:
