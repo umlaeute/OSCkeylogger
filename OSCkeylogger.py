@@ -9,47 +9,61 @@ each keypress generates an event like:
 import sys
 import hooklib, osc
 
-osc.init()
-Host="localhost"
-Port=6666
+OKL = None
 
-def printevent(event):
-    print 'MessageName:',event.MessageName
-    print 'Window:',event.Window
-    print 'WindowName:',event.WindowName
-    print 'Ascii:', event.Ascii, chr(event.Ascii)
-    print 'Key:', event.Key
-    print 'KeyID:', event.KeyID
-    print 'ScanCode:', event.ScanCode
-    print '---'
+class OSCkeylogger:
+    host="localhost"
+    port=6666
 
-    return True
+    def printevent(event):
+        print 'MessageName:',event.MessageName
+        print 'Window:',event.Window
+        print 'WindowName:',event.WindowName
+        print 'Ascii:', event.Ascii, chr(event.Ascii)
+        print 'Key:', event.Key
+        print 'KeyID:', event.KeyID
+        print 'ScanCode:', event.ScanCode
+        print '---'
 
-def sendevent(event, down):
-	bundle=osc.createBundle()
-	osc.appendToBundle(bundle, "/keylogger/window/"+str(event.Window)+"/key", [event.Key, down])
-	osc.appendToBundle(bundle, "/keylogger/WindowName/"+event.WindowName+"/key", [event.Key, down])
-	osc.sendBundle(bundle, Host, Port)
+        return True
+
+    def sendevent(self, event, down):
+        bundle=osc.createBundle()
+        osc.appendToBundle(bundle, "/keylogger/window/"+str(event.Window)+"/key", [event.Key, down])
+        osc.appendToBundle(bundle, "/keylogger/WindowName/"+event.WindowName+"/key", [event.Key, down])
+        osc.sendBundle(bundle, self.host, self.port)
 	
  
-def OnKeyboardEvent(event):
-	#printevent(event)
-	if("key down"==event.MessageName):
-		sendevent(event, 1)
-	elif("key up"==event.MessageName):
-		sendevent(event, 0)
-	return True
+    def OnKeyboardEvent(self, event):
+        if("key down"==event.MessageName):
+            self.sendevent(event, 1)
+        elif("key up"==event.MessageName):
+            self.sendevent(event, 0)
+        #printevent(event)
+        return True
+
+    def __init__(self, port=6666, host="localhost"):
+        global OKL
+        if(OKL):
+            raise Exception("OSCkeylogger already exists")
+        OKL=self
+        
+        osc.init()
+        self.host=host
+        self.port=int(port)
+        print "reporting to %s:%d" % (self.host, self.port)
+        self.hm=hooklib.HookManager()
+        self.hm.KeyDown = self.OnKeyboardEvent
+        self.hm.KeyUp = self.OnKeyboardEvent
+        self.hm.HookKeyboard()
+
+    def start(self):
+        self.hm.start()
+
 
 def main(script, port=6666, host="localhost"):
-    global Host, Port
-    Host=host
-    Port=int(port)
-    print "reporting to %s:%d" % (Host, Port)
-    hm=hooklib.HookManager()
-    hm.KeyDown = OnKeyboardEvent
-    hm.KeyUp = OnKeyboardEvent
-    hm.HookKeyboard()
-    hm.start()
+    okl = OSCkeylogger(port, host)
+    okl.start()
 
 
 if __name__ == '__main__':
