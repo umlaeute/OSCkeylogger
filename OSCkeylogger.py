@@ -12,6 +12,7 @@ import hooklib, osc
 class OSCkeylogger:
     host="localhost"
     port=6666
+    callback=None
 
     def printevent(event):
         print 'MessageName:',event.MessageName
@@ -30,6 +31,8 @@ class OSCkeylogger:
         osc.appendToBundle(bundle, "/keylogger/window/"+str(event.Window)+"/key", [event.Key, down])
         osc.appendToBundle(bundle, "/keylogger/WindowName/"+event.WindowName+"/key", [event.Key, down])
         osc.sendBundle(bundle, self.host, self.port)
+        if(self.callback):
+            self.callback(str(event.Window), str(event.Key))
 	
  
     def OnKeyboardEvent(self, event):
@@ -59,6 +62,9 @@ class OSCkeylogger:
     def setHostPort(self, host, port):
         self.host=host
         self.port=port
+
+    def setCallback(self, callback):
+        self.callback=callback
 
 def main(script, port=6666, host="localhost"):
     okl = OSCkeylogger(host, port)
