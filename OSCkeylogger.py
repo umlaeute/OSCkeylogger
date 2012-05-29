@@ -53,6 +53,8 @@ class OSCkeylogger:
     def start(self):
         self.hm.start()
 
+    def stop(self):
+        self.hm.cancel()
 
 def main(script, port=6666, host="localhost"):
     okl = OSCkeylogger(host, port)
