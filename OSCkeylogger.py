@@ -29,7 +29,7 @@ class OSCkeylogger:
     def sendevent(self, event, down):
         bundle=osc.createBundle()
         osc.appendToBundle(bundle, "/keylogger/window/"+str(event.Window)+"/key", [event.Key, down])
-        osc.appendToBundle(bundle, "/keylogger/WindowName/"+event.WindowName+"/key", [event.Key, down])
+        osc.appendToBundle(bundle, "/keylogger/WindowName/"+str(event.WindowName)+"/key", [event.Key, down])
         osc.sendBundle(bundle, self.host, self.port)
         if(self.callback):
             self.callback(str(event.Window), str(event.Key))
