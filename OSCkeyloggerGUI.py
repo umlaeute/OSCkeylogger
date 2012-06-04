@@ -8,7 +8,7 @@ each keypress generates an event like:
 """
 
 from Tkinter import *
-import string
+import string, os
 from threading import Thread
 
 from OSCkeylogger import OSCkeylogger
@@ -93,19 +93,22 @@ class OklAppWindow():
         self.port=port
         self.okl=okl
 
-        self.eventName=StringVar()
-        self.eventName.set("???")
+        if os.name == 'posix':
+            self.eventName=StringVar()
+            self.eventName.set("???")
 
         self.l1 = Label(self.top, text="Host:").grid(row=0)
         self.l2 = Label(self.top, text="Port:").grid(row=1)
 
-        self.e1 = Label(self.top, text=self.host).grid(row=0, column=1)
-        self.e2 = Label(self.top, text=str(self.port)).grid(row=1, column=1)
+        self.e1 = Label(self.top, width=30, text=self.host).grid(row=0, column=1)
+        self.e2 = Label(self.top, width=30, text=str(self.port)).grid(row=1, column=1)
 
         Button(self.top, text="configure", command=self.configure).grid(row=2, column=1)
 
-        self.l3 = Label(self.top, text="Event:").grid(row=3)
-        self.e3 = Label(self.top, width=30, textvariable=self.eventName).grid(row=3, column=1)
+        if(self.eventName):
+            self.l3 = Label(self.top, text="Event:").grid(row=3)
+            self.e3 = Label(self.top, width=30, textvariable=self.eventName).grid(row=3, column=1)
+
         self.top.update()
         self.pushHostPort()
 
