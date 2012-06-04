@@ -11,7 +11,7 @@ import os
 if os.name == 'posix':
     import pyxhook
     class HookManager(pyxhook.HookManager):
-	def start(self):
+	def start(self, needPump=True):
 		pyxhook.HookManager.start(self)
 
 elif os.name == 'nt':
@@ -19,8 +19,14 @@ elif os.name == 'nt':
     import pythoncom
 
     class HookManager(pyHook.HookManager):
-	def start(self):
-		pythoncom.PumpMessages()
+	def start(self, needPump=True):
+            if(needPump):
+                pythoncom.PumpMessages()
+            else:
+                print "not starting to pump messages"
+
+        def cancel(self):
+            print "ignoring HookManager.stop"
 else:
     print "OS is not recognised as windows or linux."
     exit()
