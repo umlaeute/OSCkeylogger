@@ -94,6 +94,7 @@ class OklAppWindow():
         self.okl=okl
 
         self.eventName=StringVar()
+        self.eventName.set("???")
 
         self.l1 = Label(self.top, text="Host:").grid(row=0)
         self.l2 = Label(self.top, text="Port:").grid(row=1)
@@ -129,10 +130,10 @@ class OklAppWindow():
 
     def eventCallback(self, windowname, keyname):
         eventname=keyname+"@"+windowname
-        if(self.eventName):
-            self.eventName.set(eventname)
-        else:
-            print "event: %s" % (eventname)
+        #if(self.eventName):
+        #    self.eventName.set(eventname)
+        #    return
+        print "eventvar %s" % (eventname)
 
     def cancel(self):
         self.top.destroy()
@@ -146,7 +147,7 @@ class OKLThread(Thread):
 
     def run(self):
         if self.okl:
-            self.okl.start()
+            self.okl.start(False)
 
     def stop(self) :
         if self.okl:
