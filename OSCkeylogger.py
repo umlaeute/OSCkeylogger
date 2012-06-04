@@ -14,7 +14,7 @@ class OSCkeylogger:
     port=6666
     callback=None
 
-    def printevent(event):
+    def printevent(self, event):
         print 'MessageName:',event.MessageName
         print 'Window:',event.Window
         print 'WindowName:',event.WindowName
@@ -34,13 +34,13 @@ class OSCkeylogger:
         if(self.callback):
             self.callback(str(event.Window), str(event.Key))
 	
- 
+
     def OnKeyboardEvent(self, event):
+        #self.printevent(event)
         if("key down"==event.MessageName):
             self.sendevent(event, 1)
         elif("key up"==event.MessageName):
             self.sendevent(event, 0)
-        #printevent(event)
         return True
 
     def __init__(self, host="localhost", port=6666):
@@ -53,8 +53,8 @@ class OSCkeylogger:
         self.hm.KeyUp = self.OnKeyboardEvent
         self.hm.HookKeyboard()
 
-    def start(self):
-        self.hm.start()
+    def start(self, needPump=True):
+        self.hm.start(needPump)
 
     def stop(self):
         self.hm.cancel()
