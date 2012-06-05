@@ -112,13 +112,13 @@ class OklAppWindow():
         self.keyName=StringVar()
         self.keyName.set("???")
 
-        self.l1 = Label(self.top, text="Host:").grid(row=0)
-        self.l2 = Label(self.top, text="Port:").grid(row=1)
+        self.l1 = Label(self.top, text="OSCHost:").grid(row=0)
+        self.l2 = Label(self.top, text="OSCPort:").grid(row=1)
 
         self.e1 = Label(self.top, width=30, textvariable=self.hostName).grid(row=0, column=1)
         self.e2 = Label(self.top, width=30, textvariable=self.portName).grid(row=1, column=1)
 
-        Button(self.top, text="configure", command=self.configure).grid(row=2, column=1)
+        Button(self.top, text="configure", command=self.configure).grid(row=0, column=2)
 
         self.l3 = Label(self.top, text="Window:").grid(row=3)
         self.e3 = Label(self.top, width=30, textvariable=self.windowName).grid(row=3, column=1)
