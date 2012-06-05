@@ -85,7 +85,10 @@ class OklAppWindow():
     port=7777
     okl=None
 
-    eventName=None
+    windowName=None
+    keyName=None
+    window_name="???"
+    key_name="???"
 
     def __init__(self, host, port, okl):
         self.top=Tk()
@@ -97,9 +100,10 @@ class OklAppWindow():
         self.port=port
         self.okl=okl
 
-        if os.name == 'posix':
-            self.eventName=StringVar()
-            self.eventName.set("???")
+        self.windowName=StringVar()
+        self.windowName.set("???")
+        self.keyName=StringVar()
+        self.keyName.set("???")
 
         self.l1 = Label(self.top, text="Host:").grid(row=0)
         self.l2 = Label(self.top, text="Port:").grid(row=1)
@@ -109,9 +113,10 @@ class OklAppWindow():
 
         Button(self.top, text="configure", command=self.configure).grid(row=2, column=1)
 
-        if(self.eventName):
-            self.l3 = Label(self.top, text="Event:").grid(row=3)
-            self.e3 = Label(self.top, width=30, textvariable=self.eventName).grid(row=3, column=1)
+        self.l3 = Label(self.top, text="Window:").grid(row=3)
+        self.e3 = Label(self.top, width=30, textvariable=self.windowName).grid(row=3, column=1)
+        self.l4 = Label(self.top, text="Key:").grid(row=4)
+        self.e4 = Label(self.top, width=30, textvariable=self.keyName).grid(row=4, column=1)
 
         self.top.update()
         self.pushHostPort()
@@ -137,15 +142,19 @@ class OklAppWindow():
         print "connecting to %s:%d" % (self.host, self.port)
 
     def idleTask(self):
+        self.updateLabels()
         #self.top.after_idle(idleProxy, self)
         self.top.after(100, idleProxy, self)
 
+    def updateLabels(self):
+        if(self.windowName):
+            self.windowName.set(self.window_name)
+        if(self.keyName):
+            self.keyName.set(self.key_name)
+
     def eventCallback(self, windowname, keyname):
-        eventname=keyname+"@"+windowname
-        #if(self.eventName):
-        #    self.eventName.set(eventname)
-        #    return
-        print "eventvar %s" % (eventname)
+        self.window_name=windowname
+        self.key_name=keyname
 
     def cancel(self):
         self.top.destroy()
