@@ -16,6 +16,10 @@ from OSCkeylogger import OSCkeylogger
 import tkSimpleDialog
 import tkMessageBox
 
+
+def idleProxy(self):
+    self.idleTask()
+
 class OklConfigDialog(tkSimpleDialog.Dialog):
     host="localhost"
     port=6666
@@ -111,6 +115,7 @@ class OklAppWindow():
 
         self.top.update()
         self.pushHostPort()
+        self.idleTask()
 
 
     def start(self):
@@ -130,6 +135,10 @@ class OklAppWindow():
 
     def dump(self):
         print "connecting to %s:%d" % (self.host, self.port)
+
+    def idleTask(self):
+        #self.top.after_idle(idleProxy, self)
+        self.top.after(100, idleProxy, self)
 
     def eventCallback(self, windowname, keyname):
         eventname=keyname+"@"+windowname
