@@ -85,6 +85,9 @@ class OklAppWindow():
     port=7777
     okl=None
 
+    hostName=None
+    portName=None
+
     windowName=None
     keyName=None
     window_name="???"
@@ -95,10 +98,14 @@ class OklAppWindow():
         self.top.title("OSCkeylogger")
         self.top.protocol("WM_DELETE_WINDOW", self.cancel)
 
-
         self.host=host
         self.port=port
         self.okl=okl
+
+        self.hostName=StringVar()
+        self.hostName.set(self.host)
+        self.portName=StringVar()
+        self.portName.set(str(self.port))
 
         self.windowName=StringVar()
         self.windowName.set("???")
@@ -108,8 +115,8 @@ class OklAppWindow():
         self.l1 = Label(self.top, text="Host:").grid(row=0)
         self.l2 = Label(self.top, text="Port:").grid(row=1)
 
-        self.e1 = Label(self.top, width=30, text=self.host).grid(row=0, column=1)
-        self.e2 = Label(self.top, width=30, text=str(self.port)).grid(row=1, column=1)
+        self.e1 = Label(self.top, width=30, textvariable=self.hostName).grid(row=0, column=1)
+        self.e2 = Label(self.top, width=30, textvariable=self.portName).grid(row=1, column=1)
 
         Button(self.top, text="configure", command=self.configure).grid(row=2, column=1)
 
@@ -132,6 +139,9 @@ class OklAppWindow():
     def setHostPort(self, host, port):
         self.host=host
         self.port=port
+        self.hostName.set(self.host)
+        self.portName.set(str(self.port))
+
         self.pushHostPort()
 
     def pushHostPort(self):
