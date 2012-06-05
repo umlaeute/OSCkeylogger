@@ -1,20 +1,38 @@
-OSCkeylogger
+﻿OSCkeylogger
 
-this little program logs all keypresses on your computer and sends them via OSC
+this little program logs all keypresses on your computer and sends them via OSC (over UDP)
 to a (potentially remote) OSC-receiver.
 
-USAGE:
-start with 
-$ ./OSCkeylogger.py <port> <host>
+USAGE (GUI):
+start the OSkeyloggerGUI (see below), which should pop up a small window,
+where you will see which key is currently pressed in which window, 
+and where you are sending those events.
+If you want to change the destination, click on "configure" and enter the new host/port 
+address.
+
+
+USAGE (cmdline):
+start OSCkeylogger.py with the target address.
+
+
+STARTING on W32:
+just click on OSCkeyloggerGUI.exe, which will start the GUI.
+
+STARTING on linux (or w32 when using python directly):
+to start the GUI, run 
+$ python ./OSCkeyloggerGUI.py [<port> [<host>]]
+to start the cmdline application, run
+$ python ./OSCkeylogger.py [<port> [<host>]]
+
 this will send all data to <host>:<port> using UDP.
 the defaults are:
  host: localhost
  port: 6666
 
-INTERPRETING THE DATA:
-key-actions are either key-down or key-up events.
-when running in a windowing environment (X, w32), the receiver will receive 
-a bundle of two (2) messages for each key-action.
+
+RECEIVING THE DATA:
+
+the receiver  will receive a bundle of two (2) messages for each key-action (key-up or key-down event).
 <bundle>
 "/keylogger/window/<windowID>/key" <keyname> <keystate>
 "/keylogger/WindowName/<windowName>/key" <keyname> <keystate>
@@ -27,11 +45,8 @@ a bundle of two (2) messages for each key-action.
 
 
 STATUS:
-- currently tested on linux/X
-- should run on w32 using pyHook
+- currently tested on linux/X and w32
 - TODO: OSX support
-- TODO: user-interface that allows to change host:port at runtime and to
-  shut-down the application
 - TODO: windowless (terminal) support
 
 AUTHOR:
