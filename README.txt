@@ -4,7 +4,7 @@ this little program logs all keypresses on your computer and sends them via OSC 
 to a (potentially remote) OSC-receiver.
 
 USAGE (GUI):
-start the OSkeyloggerGUI (see below), which should pop up a small window,
+start the OSCkeyloggerGUI (see below), which should pop up a small window,
 where you will see which key is currently pressed in which window, 
 and where you are sending those events.
 If you want to change the destination, click on "configure" and enter the new host/port 
